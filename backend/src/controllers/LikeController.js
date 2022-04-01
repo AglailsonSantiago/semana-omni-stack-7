@@ -3,7 +3,14 @@ const Post = require('../models/Post');
 module.exports = {
 
     async cadastrar(req, res){
+        const post = await Post.findById(req.params.id);
+
+        post.likes += 1;
+
+        await post.save();
+
+        req.io.emit('like', post);
         
-        return res.json({ok: true});
+        return res.json(post);
     }
 };
